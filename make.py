@@ -18,6 +18,8 @@ def save(directory_path: str, target_path: str, clazz : str):
         if (("Session" in f and "_rel_time" in f)):
             df = pd.DataFrame(pd.read_csv(str(directory_path + f)))
             falls = prep_df(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dff=3.0)
+            no_falls = find_none_falls(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dff=3.0)
+
 
             for fall in falls: 
 
@@ -25,6 +27,11 @@ def save(directory_path: str, target_path: str, clazz : str):
                 print(f)
                 store_spectograms(spec, target_path, f.split(".csv")[0])
                 #save_labels(labels, Path(target_path), "labels.npy")
+            
+            for no_fall in no_falls:
+                spec, labels = create_spectrograms(no_fall, clazz, train_seconds=[(no_falls["time_sec"].min(), no_falls["time_sec"].min())], nperseg=512)
+                store_spectograms(spec, target_path, f.split(".csv")[0])
+
             
         elif './.data/test' in directory_path:
             df = pd.DataFrame(pd.read_csv(str(directory_path + f)))
@@ -43,6 +50,23 @@ def save(directory_path: str, target_path: str, clazz : str):
                 spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=512)
                 print(f)
                 store_spectograms(spec, target_path, f.split(".csv")[0])
+
+def find_none_falls(df: pd.DataFrame, sensors: list[str], time_dff : float = 5.0, time_col : str = 'time_sec') -> list:
+    result = []
+
+    for sensor in sensors:
+        event_peak = df[sensor].max()
+
+        sensor_peak_time = float(df[df[sensor] == event_peak][time_col].max())
+        start_off_fall = float(sensor_peak_time) - time_dff
+        end_off_fall = float(sensor_peak_time) + time_dff
+
+        non_fall_df = fall_df = df[(df[time_col] < start_off_fall) & (df[time_col] > end_off_fall)]
+        result.append(non_fall_df)
+
+    return result
+
+
 
 def prep_df(df : pd.DataFrame, sensors : list[str], time_dff: float = 5.0, time_col : str = 'time_sec') -> list:
 
