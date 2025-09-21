@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ -d ".venv" ]; then
+
+    echo ".venv is already created"
+    echo "installing packages..."
+    . ./.venv/bin/activate
+    pip install -r req.txt
+    deactivate
+
+else
+    echo "creating .venv ..."
+
+    python3 -m venv .venv
+
+    . ./.venv/bin/activate
+    echo "installing packages ..."
+    pip install -r req.txt
+    deactivate
+fi
