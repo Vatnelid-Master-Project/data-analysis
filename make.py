@@ -25,12 +25,12 @@ def save(directory_path: str, target_path: str, clazz : str):
 
                 spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=512)
                 print(f)
-                store_spectograms(spec, target_path, f.split(".csv")[0])
+                store_spectograms(spec, target_path, f.split(".csv")[0], clazz)
                 #save_labels(labels, Path(target_path), "labels.npy")
             
             for no_fall in no_falls:
                 spec, labels = create_spectrograms(no_fall, "No Fall", train_seconds=[(no_fall["time_sec"].min(), no_fall["time_sec"].max())], nperseg=512)
-                store_spectograms(spec, './.spec/train/NoFall/', f.split(".csv")[0])
+                store_spectograms(spec, './is_fall/train/NoFall/', f.split(".csv")[0], "NoFall")
 
             
         elif './.data/test' in directory_path:
@@ -222,11 +222,11 @@ def get_8_channel_spectrogram(data, sampling_frequency, base_name, start_time, e
 
     return spec_8ch
 
-def store_spectograms (spectrograms, path, event):
+def store_spectograms (spectrograms, path, event, fall_type):
     
     index = 0
     for spectrogram in spectrograms:
-        np.save(path + event + str(index) + ".npy", spectrogram)
+        np.save(path + event + '-' + fall_type + str(index) + ".npy", spectrogram)
         index += 1
 
 def load(directory: str) -> list[np.ndarray]:
