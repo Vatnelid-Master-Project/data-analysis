@@ -7,7 +7,7 @@ from scipy.signal import ShortTimeFFT
 from scipy.signal.windows import hamming
 from pathlib import Path
 
-sampling_frequency = 12800  # in Hz
+sampling_frequency = 200  # in Hz
 sampling_period = 1 / sampling_frequency  # in seconds
 
 def save(directory_path: str, target_path: str, clazz : str):
@@ -22,14 +22,13 @@ def save(directory_path: str, target_path: str, clazz : str):
 
 
             for fall in falls: 
-
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=512)
+                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
                 print(f)
                 store_spectograms(spec, target_path, f.split(".csv")[0], clazz)
                 #save_labels(labels, Path(target_path), "labels.npy")
             
             for no_fall in no_falls:
-                spec, labels = create_spectrograms(no_fall, "No Fall", train_seconds=[(no_fall["time_sec"].min(), no_fall["time_sec"].max())], nperseg=512)
+                spec, labels = create_spectrograms(no_fall, "No Fall", train_seconds=[(no_fall["time_sec"].min(), no_fall["time_sec"].max())], nperseg=25)
                 store_spectograms(spec, './is_fall/train/NoFall/', f.split(".csv")[0], "NoFall")
 
             
@@ -39,7 +38,7 @@ def save(directory_path: str, target_path: str, clazz : str):
 
             for fall in falls: 
 
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=512)
+                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
                 print(f)
                 store_spectograms(spec, target_path, f.split(".csv")[0])
         elif "False_labeled" in f:
@@ -47,7 +46,7 @@ def save(directory_path: str, target_path: str, clazz : str):
             falls = pred_no_fall_df(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dif=3.0)
             
             for fall in falls:
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=512)
+                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
                 print(f)
                 store_spectograms(spec, target_path, f.split(".csv")[0])
 
@@ -188,18 +187,18 @@ def create_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : int=2
             end_sample = start_sample + samples_per_interval
 
             spec_8ch = get_8_channel_spectrogram(
-                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)], sampling_frequency,
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)],
                 segment_start_time, segment_end_time, nperseg)
 
             all_spectrograms.append(spec_8ch)
             all_labels.append(fault_category)
 
-        print(f"Generated {i+1} spectrograms - label: {fault_category}")
+            print(f"Generated {i+1} spectrograms - label: {fault_category}")
 
     return all_spectrograms, all_labels
 
 # This function turns all 8 sensor streams into spectrograms. Later we choose to use only the vibration sensors from the gearbox. 
-def get_8_channel_spectrogram(data, sampling_frequency, base_name, start_time, end_time, nperseg = 512):
+def get_8_channel_spectrogram(data, base_name, start_time, end_time, sampling_frequency = 200, nperseg = 25):
 
     all_spectrograms = []
     all_labels = []
@@ -208,19 +207,17 @@ def get_8_channel_spectrogram(data, sampling_frequency, base_name, start_time, e
     
     for column in data:
         if column.startswith("sensor_1") or column.startswith("sensor_2") or column.startswith("sensor_3") or column.startswith("sensor_4"): # This can be used to filter out specific columns
+            
             col = data[column]
+            print(len(col.values))
+            if (len(col.values) >= nperseg/2):
+                w = hamming(nperseg) # Hamming window
+                Sft = ShortTimeFFT(w, hop=int(nperseg*0.25), fs=sampling_frequency, scale_to='psd')
+                Sxx = Sft.spectrogram(col.values)  # calculate absolute square of STFT
+                all_spectrograms.append(Sxx)
 
-            if len(col) < 256:
-                all_spectrograms.append([])
-                break
-
-            w = hamming(nperseg) # Hamming window
-            Sft = ShortTimeFFT(w, hop=int(nperseg*0.25), fs=sampling_frequency, scale_to='psd')
-            Sxx = Sft.spectrogram(col.values)  # calculate absolute square of STFT
-            all_spectrograms.append(Sxx)
-    spec_8ch = np.stack(all_spectrograms, axis=0)
-
-    return spec_8ch
+    if len(all_spectrograms) > 0:
+        return np.stack(all_spectrograms, axis=0)
 
 def store_spectograms (spectrograms, path, event, fall_type):
     
