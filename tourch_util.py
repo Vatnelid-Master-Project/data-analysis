@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from matplotlib import pyplot as plt
 from fastai.vision.all import TensorImage
 
 class TorchUtil:
@@ -10,8 +11,39 @@ class TorchUtil:
         self.EPS = EPS
         self.FLOOR_DB = FLOOR_DB
         self.TARGET_HW = TARGET_HW
+
+    def get_x(self, i):
+        """
+        Convert spectrogram to TensorImage format
+        """
+        # Normalization - turn spectrogram into dB scale
+        arr_db = 10 * np.log10(self.all_spectrograms[i])
+        arr_db = np.clip(arr_db, self.FLOOR_DB, 0)
+
+        # Scale to [0, 1]
+        arr_01 = (arr_db - self.FLOOR_DB) / (-self.FLOOR_DB)
+
+        # If spectrogram is multi-channel, convert to grayscale first
+        if len(arr_db.shape) == 3:
+                arr_db = np.mean(arr_db, axis=-1)  # average across channels
         
-        pass
+        arr_01 = arr_01[:, ::-1].copy() # flip spectrogram
+        
+        # Apply colormap to convert grayscale to color
+        # Popular colormaps for spectrograms: 'viridis', 'plasma', 'magma', 'inferno', 'jet', 'hot'
+        colormap = plt.get_cmap('magma')  # or try 'plasma', 'magma', 'jet'
+        arr_colored = colormap(arr_01)  # This returns RGBA (H, W, 4)
+        
+        # Convert RGBA to RGB (drop alpha channel)
+        arr_rgb = arr_colored[:, :, :3]  # (H, W, 3)
+        
+        # Convert to PyTorch tensor with correct channel ordering
+        t = torch.tensor(arr_rgb).float().permute(2, 0, 1).unsqueeze(0)  # (1, 3, H, W)
+        
+        # Resize image
+        t_resized = torch.nn.functional.interpolate(t, size=self.TARGET_HW, mode='bilinear', align_corners=False)
+        
+        return TensorImage(t_resized.squeeze(0))  # (3, H, W)
 
     def get_spectogram(self, i):
         arr = self.all_spectrograms[i]                 # expected (C, F, T)
