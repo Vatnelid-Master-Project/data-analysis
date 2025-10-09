@@ -7,144 +7,48 @@ from scipy.signal import ShortTimeFFT
 from scipy.signal.windows import hamming
 from pathlib import Path
 
-sampling_frequency = 200  # in Hz
-sampling_period = 1 / sampling_frequency  # in seconds
+sampling_frequency = 200 # Hz
 
-def save(directory_path: str, target_path: str, clazz : str):
-    ds = os.listdir(directory_path)
+def create_false_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+    all_spectrograms = []
+    all_labels = []
+    segments = []
+
+    treshold = 5
+
+    peak_time = df[df["sensor_1"] == df["sensor_1"].max()]["time_sec"].max()
+
+    start_fall = peak_time - treshold
+    end_fall = peak_time + treshold
     
-    for f in ds:
+    segments.append((df["time_sec"].min(), start_fall))
+    segments.append((end_fall, df["time_sec"].max()))
 
-        if (("Session" in f and "_rel_time" in f)):
-            df = pd.DataFrame(pd.read_csv(str(directory_path + f)))
-            falls = prep_df(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dff=3.0)
-            no_falls = find_none_falls(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dff=3.0)
+    for start_sec, end_sec in segments:
+        num_segments = int((end_sec - start_sec) // SECONDS)
 
-
-            for fall in falls: 
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
-                print(f)
-                store_spectograms(spec, target_path, f.split(".csv")[0], clazz)
-                #save_labels(labels, Path(target_path), "labels.npy")
-            
-            for no_fall in no_falls:
-                spec, labels = create_spectrograms(no_fall, "No Fall", train_seconds=[(no_fall["time_sec"].min(), no_fall["time_sec"].max())], nperseg=25)
-                store_spectograms(spec, './is_fall/train/NoFall/', f.split(".csv")[0], "NoFall")
-
-            
-        elif './.data/test' in directory_path:
-            df = pd.DataFrame(pd.read_csv(str(directory_path + f)))
-            falls = prep_df(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dff=3.0)
-
-            for fall in falls: 
-
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
-                print(f)
-                store_spectograms(spec, target_path, f.split(".csv")[0])
-        elif "False_labeled" in f:
-            df = pd.DataFrame(pd.read_csv(str(directory_path + f)))
-            falls = pred_no_fall_df(df, ["sensor_1", "sensor_2", "sensor_3", "sensor_4"], time_dif=3.0)
-            
-            for fall in falls:
-                spec, labels = create_spectrograms(fall, clazz, train_seconds=[(fall["time_sec"].min(), fall["time_sec"].max())], nperseg=25)
-                print(f)
-                store_spectograms(spec, target_path, f.split(".csv")[0])
-
-def find_none_falls(df: pd.DataFrame, sensors: list[str], time_dff : float = 5.0, time_col : str = 'time_sec') -> list:
-    result = []
-
-    for sensor in sensors:
-        event_peak = df[sensor].max()
-
-        sensor_peak_time = float(df[df[sensor] == event_peak][time_col].max())
-        start_off_fall = float(sensor_peak_time) - time_dff
-        end_off_fall = float(sensor_peak_time) + time_dff
-
-        non_fall_df = df[(df[time_col] < start_off_fall) | (df[time_col] > end_off_fall)]
-        result.append(non_fall_df)
-
-    return result
-
-
-
-def prep_df(df : pd.DataFrame, sensors : list[str], time_dff: float = 5.0, time_col : str = 'time_sec') -> list:
-
-    result = []
-
-    for sensor in sensors:
-        event_peak = df[sensor].max()
-
-        sensor_peak_time = float(df[df[sensor] == event_peak][time_col].max())
         
-        start_time_threshold = float(sensor_peak_time) - time_dff
-        
-        fall_start_time = df.loc[df[time_col] >= start_time_threshold, time_col].min()
 
-        end_time_threshold = float(sensor_peak_time) + time_dff
+        for i in range(num_segments):
+            segment_start_time = start_sec + i * SECONDS
+            segment_end_time = segment_start_time + SECONDS
 
-        fall_end_time = df.loc[df[time_col] <= end_time_threshold, time_col].max()
+            spec_8ch = get_8_channel_spectrogram(
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)], nperseg)
 
-        fall_df = df[(df[time_col] >= fall_start_time) & (df[time_col] <= fall_end_time)]
-        result.append(fall_df)
+            all_spectrograms += spec_8ch
 
-    return result
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            
+            print(f"Generated {i+1} spectrograms - label: Not Fall")
 
-def pred_no_fall_df(df: pd.DataFrame, sensors : list [str], time_dif: float = 5.0, time_col : str = 'time_sec') -> list[pd.DataFrame]:
-    result =  []
-    
-    start_time = 0.0
-    for sensor in sensors:
-        
-        current_treshold = start_time + time_dif
-        current_df = df[(df[time_col] >= start_time) & (df[time_col] < current_treshold)]
-        result.append(current_df)
-
-        start_time += time_dif
-    
-    return result
+    return all_spectrograms, all_labels
 
 
-def make_spectograms(df : pd.DataFrame, 
-                     sensor_name : str, 
-                     file_name : str, 
-                     nperseg = 512, 
-                     sampling_frequency = 12800, 
-                     bin_width = 2.0,
-                     closed="right"):
-    # TODO Fix so that we are createing spectograms correctly
-    
-    if isinstance(sensor_name, tuple) and len(sensor_name) == 1:
-        sensor_name = sensor_name[0]
-    if isinstance(sensor_name, (list, tuple)):
-        raise ValueError("Pass a single sensor column name (string), not a list/tuple.")
-    
-    
-    dataFrames : list[pd.DataFrame] = []
-    
-    for i in range(round(df["time_sec"].min()), round(df["time_sec"].max())):
-    
-        start = i # start time in seconds
-        end = int(i + bin_width)
-
-        edges = np.arange(start, end + 1, 1)
-
-        cuts = pd.cut(df["time_sec"], bins=edges, right=True, include_lowest=True)
-
-        dfs_by_second = df.assign(second_bin=cuts)
-
-        dataFrames.append(dfs_by_second)
-
-
-    for i in dataFrames:
-        #if column.startswith("gearbox_vibration"): # This can be used to filter out specific columns            
-            data = i[sensor_name]
-            plt.figure(figsize=(15, 15))
-            plt.axis("off")
-            plt.specgram(data)
-            plt.savefig(file_name + sensor_name + '.png', bbox_inches='tight', pad_inches=0)
-            plt.close()
-    
-def create_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : int=2, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+def create_true_spectrograms(df : pd.DataFrame, SECONDS : int=2, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
     """
     Generates and returns spectrograms for specified time segments.
 
@@ -162,46 +66,82 @@ def create_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : int=2
     """
     all_spectrograms = []
     all_labels = []
+    segments = []
 
-    if mode == 'train':
-        segments = train_seconds or []
-    elif mode == 'val':
-        segments = val_seconds or []
-    elif mode == 'test':
-        segments = test_seconds or []
-    else:
-        raise ValueError("mode must be 'train', 'val' or 'test'")
+    treshold = 4
 
-    samples_per_interval = int(sampling_frequency * SECONDS)
+    peak_time = df[df["sensor_1"] == df["sensor_1"].max()]["time_sec"].max()
+
+    start_time = peak_time - treshold
+    end_time = peak_time + treshold
+    
+    segments.append((start_time, end_time))
 
     for start_sec, end_sec in segments:
-        print(end_sec)
-        print(start_sec)
-        num_segments = int((end_sec - start_sec) // SECONDS)
 
-        for i in range(num_segments):
-            segment_start_time = start_sec + i * SECONDS
-            segment_end_time = segment_start_time + SECONDS
+        spec_8ch = get_8_channel_spectrogram(
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], nperseg)
 
-            start_sample = int(segment_start_time * sampling_frequency)
-            end_sample = start_sample + samples_per_interval
+        all_spectrograms += spec_8ch
+        all_labels.append("Fall")
+        all_labels.append("Fall")
+        all_labels.append("Fall")
+        all_labels.append("Fall")
 
-            spec_8ch = get_8_channel_spectrogram(
-                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)],
-                segment_start_time, segment_end_time, nperseg)
-
-            all_spectrograms.append(spec_8ch)
-            all_labels.append(fault_category)
-
-            print(f"Generated {i+1} spectrograms - label: {fault_category}")
+        print(f"Generated {1} spectrograms - label: Fall")
 
     return all_spectrograms, all_labels
 
-# This function turns all 8 sensor streams into spectrograms. Later we choose to use only the vibration sensors from the gearbox. 
-def get_8_channel_spectrogram(data, base_name, start_time, end_time, sampling_frequency = 200, nperseg = 25):
+def create_fall_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : int=2, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+    """
+    Generates and returns spectrograms for specified time segments.
 
+    Parameters:
+    dataDict (dict): Dict containing fault category data.
+    fault_category (str): Category to process.
+    SECONDS (int): Length of each spectrogram segment in seconds.
+    nperseg (int): FFT window size.
+    train_seconds (list of tuples): List of (start, end) in seconds for training.            all_labels.append(fault_category)
+    val_seconds (list of tuples): List of (start, end) in seconds for validation.
+    mode (str): 'train' or 'val' - determines which segments to use.
+
+    Returns:
+    spectrograms, labels
+    """
     all_spectrograms = []
     all_labels = []
+    segments = []
+
+    treshold = 5
+
+    peak_time = df[df["sensor_1"] == df["sensor_1"].max()]["time_sec"].max()
+
+    start_time = peak_time - treshold
+    end_time = peak_time + treshold
+    
+    segments.append((start_time, end_time))
+
+    for start_sec, end_sec in segments:
+
+        spec_8ch = get_8_channel_spectrogram(
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], nperseg)
+
+        all_spectrograms += spec_8ch
+
+        # One fault category for each sensor (the fault is the same)
+        all_labels.append(fault_category)
+        all_labels.append(fault_category)
+        all_labels.append(fault_category)
+        all_labels.append(fault_category)
+
+
+        print(f"Generated {1} spectrograms - label: {fault_category}")
+
+    return all_spectrograms, all_labels
+
+def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 256, dynamic_range_db = 60, band_max_hz = 200):
+
+    all_spectrograms = []
 
     # Slice to first 5 seconds if desired
     
@@ -209,33 +149,118 @@ def get_8_channel_spectrogram(data, base_name, start_time, end_time, sampling_fr
         if column.startswith("sensor_1") or column.startswith("sensor_2") or column.startswith("sensor_3") or column.startswith("sensor_4"): # This can be used to filter out specific columns
             
             col = data[column]
-            print(len(col.values))
-            if (len(col.values) >= nperseg/2):
-                w = hamming(nperseg) # Hamming window
-                Sft = ShortTimeFFT(w, hop=int(nperseg*0.25), fs=sampling_frequency, scale_to='psd')
-                Sxx = Sft.spectrogram(col.values)  # calculate absolute square of STFT
-                all_spectrograms.append(Sxx)
+            w = hamming(nperseg) # Hamming window
+            Sft = ShortTimeFFT(w, hop=int(nperseg*0.25), fs=sampling_frequency, scale_to='psd')
+            Sxx = Sft.spectrogram(col.values)  # calculate absolute square of STFT
 
-    if len(all_spectrograms) > 0:
-        return np.stack(all_spectrograms, axis=0)
+            # --- convert to dB and clip dynamic range ---
+            # Normalization - turn spectrogram into dB scale
+            Sxx_db = 10*np.log10(Sxx + 1e-12)
+            vmax = np.percentile(Sxx_db, 95)
+            vmin = vmax - dynamic_range_db
+            Sxx_db = np.clip(Sxx_db, vmin, vmax)
 
-def store_spectograms (spectrograms, path, event, fall_type):
+            # --- optional band limit on frequency axis ---
+            f = np.linspace(0, sampling_frequency/2, Sxx_db.shape[0])
+            if band_max_hz is not None:
+                keep = f <= band_max_hz
+                Sxx_db = Sxx_db[keep, :]
+
+            all_spectrograms.append(Sxx_db.astype(np.float32))
+
+    return all_spectrograms
+
+def get_primary_data(dir: Path):
+    directory = os.listdir(str(dir))
     
-    index = 0
-    for spectrogram in spectrograms:
-        np.save(path + event + '-' + fall_type + str(index) + ".npy", spectrogram)
-        index += 1
+    data = []
+    fault_labels = []
 
-def load(directory: str) -> list[np.ndarray]:
-    files = os.listdir(directory)
+    for file in directory:
+        if (("Session" in file and "_rel_time" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+            
+            #Makes sure the length for none_falls is equal to the actuall falls.
+            f_spec = f_spec[:len(t_spec)]
+            f_labels = f_labels[:len(t_labels)]
+
+            data += t_spec
+            data += f_spec
+
+            fault_labels += t_labels
+            fault_labels += f_labels
     
-    result = []
+    return data, fault_labels
 
-    for file in files:
-        arr = np.load(directory + "/" + file)
-        result.append(arr)
+def get_secondary_data(dir: Path, fault_category: str):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
 
-    return result
+    for file in directory:
+        if (("Session" in file and "_rel_time" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=4, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+            data += spec
+            fault_labels += labels
+    
+    return data, fault_labels
 
-def save_labels(labels: list, storeage_path:Path, file_name: str):
-    np.save(storeage_path/file_name, labels)
+def load_primary_data():
+    test_spectograms = []
+    test_labels = []
+
+    validation_path = Path('./.data/train')
+
+
+
+    controlled = Path(validation_path/'controlledFall')
+    hard = Path(validation_path/'hardFall')
+    slipTrip = Path(validation_path/'Slip/Trip')
+
+    
+    controlled_falls, controlled_labels = get_primary_data(controlled)
+    hard_falls, hard_labels = get_primary_data(hard)
+    slip_trip_fall, slipTrip_labels = get_primary_data(slipTrip)
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
+
+    test_spectograms += hard_falls
+    test_labels += hard_labels
+
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
+
+def load_secondary_data():
+    test_spectograms = []
+    test_labels = []
+
+    validation_path = Path('./.data/train')
+
+
+
+    controlled = Path(validation_path/'controlledFall')
+    hard = Path(validation_path/'hardFall')
+    slipTrip = Path(validation_path/'Slip/Trip')
+
+    
+    controlled_falls, controlled_labels = get_secondary_data(controlled, 'Controlled Fall')
+    hard_falls, hard_labels = get_secondary_data(hard, 'Hard Fall')
+    slip_trip_fall, slipTrip_labels = get_secondary_data(slipTrip, 'SlipTrip')
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
+
+    test_spectograms += hard_falls
+    test_labels += hard_labels
+
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
