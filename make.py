@@ -179,7 +179,7 @@ def get_primary_data(dir: Path):
     for file in directory:
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
-            t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            t_spec, t_labels = create_true_spectrograms(df, SECONDS=8, nperseg=256)
             f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
             
             #Makes sure the length for none_falls is equal to the actuall falls.
@@ -203,9 +203,53 @@ def get_secondary_data(dir: Path, fault_category: str):
     for file in directory:
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
-            spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=4, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+            spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=8, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
             data += spec
             fault_labels += labels
+    
+    return data, fault_labels
+
+def get_heathly_data (dir: Path):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        if (("Session" in file and "_rel_time" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+
+            #f_spec = f_spec[:len(t_spec)]
+            #f_labels = f_labels[:len(t_labels)]
+
+            data += f_spec
+            fault_labels += f_labels
+    
+    return data, fault_labels
+
+def get_pipeline_data(dir: Path, fault_category):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        if (("Session" in file and "_rel_time" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            t_spec, t_labels = create_fall_spectrograms(df, fault_category, SECONDS=8, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+            
+            #Makes sure the length for none_falls is equal to the actuall falls.
+            f_spec = f_spec[:len(t_spec)]
+            f_labels = f_labels[:len(t_labels)]
+
+            data += t_spec
+            data += f_spec
+
+            fault_labels += t_labels
+            fault_labels += f_labels
     
     return data, fault_labels
 
@@ -237,6 +281,35 @@ def load_primary_data():
 
     return test_spectograms, test_labels
 
+def load_data_for_pipeline():
+    test_spectograms = []
+    test_labels = []
+
+    validation_path = Path('./.data/train')
+
+
+
+    controlled = Path(validation_path/'controlledFall')
+    hard = Path(validation_path/'hardFall')
+    slipTrip = Path(validation_path/'Slip/Trip')
+
+    
+    controlled_falls, controlled_labels = get_pipeline_data(controlled, 'Controlled Fall')
+    hard_falls, hard_labels = get_pipeline_data(hard, "Hard Fall")
+    slip_trip_fall, slipTrip_labels = get_pipeline_data(slipTrip, "SlipTrip")
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
+
+    test_spectograms += hard_falls
+    test_labels += hard_labels
+
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
+
+
 def load_secondary_data():
     test_spectograms = []
     test_labels = []
@@ -264,3 +337,24 @@ def load_secondary_data():
     test_labels += slipTrip_labels
 
     return test_spectograms, test_labels
+
+def load_heathy_data ():
+    test_spectograms = []
+
+    validation_path = Path('./.data/train')
+
+    controlled = Path(validation_path/'controlledFall')
+    hard = Path(validation_path/'hardFall')
+    slipTrip = Path(validation_path/'Slip/Trip')
+
+    non_controlled_fall, labels = get_heathly_data(controlled)
+    non_hard_fall, labels = get_heathly_data(hard)
+    non_slip_trip, labels = get_heathly_data(slipTrip)
+
+    test_spectograms += non_controlled_fall
+    test_spectograms += non_hard_fall
+    test_spectograms += non_slip_trip
+
+    return test_spectograms
+
+
