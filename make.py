@@ -68,7 +68,7 @@ def create_true_spectrograms(df : pd.DataFrame, SECONDS : int=2, nperseg=None, t
     all_labels = []
     segments = []
 
-    treshold = 4
+    treshold = 5
 
     peak_time = df[df["sensor_1"] == df["sensor_1"].max()]["time_sec"].max()
 
