@@ -5,6 +5,7 @@ import os
 
 from scipy.signal import ShortTimeFFT
 from scipy.signal.windows import hamming
+from scipy.signal import butter, filtfilt
 from pathlib import Path
 
 sampling_frequency = 200 # Hz
@@ -34,7 +35,42 @@ def create_false_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=None, 
             segment_end_time = segment_start_time + SECONDS
 
             spec_8ch = get_8_channel_spectrogram(
-                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)], nperseg)
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)])
+
+            all_spectrograms += spec_8ch
+
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            
+            print(f"Generated {i+1} spectrograms - label: Not Fall")
+
+    return all_spectrograms, all_labels
+
+def create_non_fall_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+    all_spectrograms = []
+    all_labels = []
+    segments = []
+
+    print("nperseg: ", nperseg)
+
+    df = df[ df["Fall_or_NotFall"] == 'NotFall']
+
+    start_fall = df["time_sec"].min()
+    end_fall = df["time_sec"].max()
+    
+    segments.append((start_fall, end_fall))
+
+    for start_sec, end_sec in segments:
+        num_segments = int((end_sec - start_sec) // SECONDS)
+
+        for i in range(num_segments):
+            segment_start_time = start_sec + i * SECONDS
+            segment_end_time = segment_start_time + SECONDS
+
+            spec_8ch = get_8_channel_spectrogram(
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)])
 
             all_spectrograms += spec_8ch
 
@@ -80,7 +116,7 @@ def create_true_spectrograms(df : pd.DataFrame, SECONDS : int=2, nperseg=None, t
     for start_sec, end_sec in segments:
 
         spec_8ch = get_8_channel_spectrogram(
-            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], nperseg)
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)])
 
         all_spectrograms += spec_8ch
         all_labels.append("Fall")
@@ -124,7 +160,7 @@ def create_fall_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : 
     for start_sec, end_sec in segments:
 
         spec_8ch = get_8_channel_spectrogram(
-            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], nperseg)
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)])
 
         all_spectrograms += spec_8ch
 
@@ -139,7 +175,7 @@ def create_fall_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : 
 
     return all_spectrograms, all_labels
 
-def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 256, dynamic_range_db = 60, band_max_hz = 200):
+def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 64, dynamic_range_db = 50, band_max_hz = 100):
 
     all_spectrograms = []
 
@@ -151,7 +187,7 @@ def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 256, dyn
             col = data[column]
             w = hamming(nperseg) # Hamming window
             Sft = ShortTimeFFT(w, hop=int(nperseg*0.25), fs=sampling_frequency, scale_to='psd')
-            Sxx = Sft.spectrogram(col.values)  # calculate absolute square of STFT
+            Sxx = Sft.spectrogram(highpass_filter(col.values, sampling_frequency))  # calculate absolute square of STFT
 
             # --- convert to dB and clip dynamic range ---
             # Normalization - turn spectrogram into dB scale
@@ -170,6 +206,10 @@ def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 256, dyn
 
     return all_spectrograms
 
+def highpass_filter(x, fs, cutoff=0.5):
+    b, a = butter(4, cutoff / (0.5 * fs), btype='high')
+    return filtfilt(b, a, x)
+
 def get_primary_data(dir: Path):
     directory = os.listdir(str(dir))
     
@@ -179,8 +219,8 @@ def get_primary_data(dir: Path):
     for file in directory:
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
-            t_spec, t_labels = create_true_spectrograms(df, SECONDS=8, nperseg=256)
-            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+            t_spec, t_labels = create_true_spectrograms(df, SECONDS=10)
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=10)
             
             #Makes sure the length for none_falls is equal to the actuall falls.
             f_spec = f_spec[:len(t_spec)]
@@ -203,7 +243,7 @@ def get_secondary_data(dir: Path, fault_category: str):
     for file in directory:
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
-            spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=8, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+            spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=10, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
             data += spec
             fault_labels += labels
     
@@ -219,7 +259,27 @@ def get_heathly_data (dir: Path):
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
             #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
-            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=10)
+
+            #f_spec = f_spec[:len(t_spec)]
+            #f_labels = f_labels[:len(t_labels)]
+
+            data += f_spec
+            fault_labels += f_labels
+    
+    return data, fault_labels
+
+def get_non_fall_data(dir: Path):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        if (("Session" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            f_spec, f_labels = create_non_fall_spectrogams(df, SECONDS=10)
 
             #f_spec = f_spec[:len(t_spec)]
             #f_labels = f_labels[:len(t_labels)]
@@ -238,8 +298,8 @@ def get_pipeline_data(dir: Path, fault_category):
     for file in directory:
         if (("Session" in file and "_rel_time" in file)):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
-            t_spec, t_labels = create_fall_spectrograms(df, fault_category, SECONDS=8, nperseg=256, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
-            f_spec, f_labels = create_false_spectrogams(df, SECONDS=8, nperseg=256)
+            t_spec, t_labels = create_fall_spectrograms(df, fault_category, SECONDS=10, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+            f_spec, f_labels = create_false_spectrogams(df, SECONDS=10)
             
             #Makes sure the length for none_falls is equal to the actuall falls.
             f_spec = f_spec[:len(t_spec)]
@@ -357,4 +417,21 @@ def load_heathy_data ():
 
     return test_spectograms
 
+def load_test_data():
 
+    test_spectograms = []
+    path = Path('.data/test/validationSet')
+
+    controlled = Path(path/'Controlled')
+    hard = Path(path/'Hard')
+    slipTrip = Path(path/'Slip_Trip')
+
+    non_controlled_fall, labels = get_non_fall_data(controlled)
+    non_hard_fall, labels = get_non_fall_data(hard)
+    non_slip_trip, labels = get_non_fall_data(slipTrip)
+
+    test_spectograms += non_controlled_fall
+    test_spectograms += non_hard_fall
+    test_spectograms += non_slip_trip
+
+    return test_spectograms
