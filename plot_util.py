@@ -37,3 +37,13 @@ class PlotUtil:
         plt.colorbar(label="Amplitude (dB)")
         plt.tight_layout()
         plt.show()
+    
+    @staticmethod
+    def plot_tensor_image(img):
+        image = img.detach().cpu().numpy()
+        image = np.transpose(image, (1, 2, 0))
+
+        plt.imshow(image)
+        plt.axis("off")
+        plt.title("Tensor Image")
+        plt.show()
