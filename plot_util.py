@@ -2,34 +2,92 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class PlotUtil:
-    def __init__(self, spectrograms):
-        self.spectrograms = spectrograms        
+    def __init__(self, spectrograms, seconds = 10):
+        self.spectrograms = spectrograms
+        self.seconds = seconds        
 
     def show_spec(self, index, title, fs=200, nperseg=64, band_max_hz=80):
         spec = self.spectrograms[index]          # shape = (n_freq_bins, n_frames)
 
-        # 1) time axis (one x-step per STFT frame)
-        hop = int(nperseg * 0.25)                # you used 25% hop
-        n_frames = spec.shape[1]
-        frame_times = np.arange(n_frames) * hop / fs   # seconds
+        global_max = max(s.max() for s in spec)
+        global_min = min(s.min() for s in spec)
 
-        # 2) frequency axis (0 .. fs/2 mapped to rows)
+        # 1) time axis (one x-step per STFT frame)
+        # frequency axis from FFT bins
         n_freq_bins = spec.shape[0]
         freqs = np.linspace(0, fs/2, n_freq_bins)
 
-        # if you ever want to crop by band_max_hz:
+        # crop frequency band
         keep = freqs <= band_max_hz
         spec = spec[keep, :]
         freqs = freqs[keep]
+
+        # *** force x-axis to [0, self.seconds] ***
+        t_min, t_max = 0.0, float(self.seconds)
 
         # 3) plot
         plt.figure(figsize=(8, 4))
         plt.imshow(
             spec,
+            vmax=global_max,
+            vmin=global_min,
             origin="lower",
             aspect="auto",
-            extent=[frame_times[0], frame_times[-1], freqs[0], freqs[-1]],
+            extent=[t_min, t_max, freqs[0], freqs[-1]],
             interpolation="bilinear",          # just to make it look smoother
+        )
+        plt.xlabel("Time (s)")
+        plt.ylabel("Frequency (Hz)")
+        plt.title(title)
+        plt.colorbar(label="Amplitude (dB)")
+        plt.tight_layout()
+        plt.show()
+    
+    def show_full_fs_range(self, index, title, fs=200, nperseg=64):
+        spec = self.spectrograms[index]          # shape = (n_freq_bins, n_frames)
+
+        global_max = max(s.max() for s in spec)
+        global_min = min(s.min() for s in spec)
+
+        # 1) time axis (one x-step per STFT frame)
+        # frequency axis from FFT bins
+
+        # *** force x-axis to [0, self.seconds] ***
+        t_min, t_max = 0.0, float(self.seconds)
+
+        # 3) plot
+        plt.figure(figsize=(8, 4))
+        plt.imshow(
+            spec,
+            vmax=global_max,
+            vmin=global_min,
+            origin="lower",
+            aspect="auto",
+            extent=[t_min, t_max, 0, fs],
+            interpolation="bilinear",          # just to make it look smoother
+        )
+        plt.xlabel("Time (s)")
+        plt.ylabel("Frequency (Hz)")
+        plt.title(title)
+        plt.colorbar(label="Amplitude (dB)")
+        plt.tight_layout()
+        plt.show()
+    
+    def plot_full_fall(self, index, times, freqs, title):
+        spec = self.spectrograms[index]
+
+        global_max = max(s.max() for s in spec)
+        global_min = min(s.min() for s in spec)
+        
+        plt.figure(figsize=(10, 4))
+        plt.imshow(
+            spec,
+            vmax=global_max,
+            vmin=global_min,
+            origin="lower",
+            aspect="auto",
+            extent=[times[0], times[-1], freqs[0], freqs[-1]],
+            interpolation="bilinear"
         )
         plt.xlabel("Time (s)")
         plt.ylabel("Frequency (Hz)")

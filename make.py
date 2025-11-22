@@ -35,7 +35,7 @@ def create_false_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=None, 
             segment_end_time = segment_start_time + SECONDS
 
             spec_8ch = get_8_channel_spectrogram(
-                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)])
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)], band_max_hz=100)
 
             all_spectrograms += spec_8ch
 
@@ -70,6 +70,41 @@ def create_non_fall_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=Non
             segment_end_time = segment_start_time + SECONDS
 
             spec_8ch = get_8_channel_spectrogram(
+                df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)], band_max_hz=100)
+
+            all_spectrograms += spec_8ch
+
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            all_labels.append("Not Fall")
+            
+            print(f"Generated {i+1} spectrograms - label: Not Fall")
+
+    return all_spectrograms, all_labels
+
+def create_full_spectrogam(df: pd.DataFrame, SECONDS: int = 10, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+    all_spectrograms = []
+    all_labels = []
+    segments = []
+
+    print("nperseg: ", nperseg)
+
+    df = df[ df["Fall_or_NotFall"] == 'NotFall']
+
+    start_fall = df["time_sec"].min()
+    end_fall = df["time_sec"].max()
+    
+    segments.append((start_fall, end_fall))
+
+    for start_sec, end_sec in segments:
+        num_segments = int((end_sec - start_sec) // SECONDS)
+
+        for i in range(num_segments):
+            segment_start_time = start_sec + i * SECONDS
+            segment_end_time = segment_start_time + SECONDS
+
+            spec_8ch = get_8_channel_spectrogram(
                 df[(df["time_sec"] >= segment_start_time) & (df["time_sec"] <= segment_end_time)])
 
             all_spectrograms += spec_8ch
@@ -82,6 +117,15 @@ def create_non_fall_spectrogams(df: pd.DataFrame, SECONDS: int = 10, nperseg=Non
             print(f"Generated {i+1} spectrograms - label: Not Fall")
 
     return all_spectrograms, all_labels
+
+def create_session_spectrogams(df: pd.DataFrame, fall_type: str, SECONDS: int = 10, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
+
+    all_labels = []
+    spec_8ch = get_8_channel_spectrogram(df, band_max_hz=100)
+
+    all_labels = [fall_type] * len(spec_8ch)
+
+    return spec_8ch, all_labels
 
 
 def create_true_spectrograms(df : pd.DataFrame, SECONDS : int=2, nperseg=None, train_seconds=None, val_seconds=None, test_seconds=None, mode='train'):
@@ -116,7 +160,7 @@ def create_true_spectrograms(df : pd.DataFrame, SECONDS : int=2, nperseg=None, t
     for start_sec, end_sec in segments:
 
         spec_8ch = get_8_channel_spectrogram(
-            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)])
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], band_max_hz=100)
 
         all_spectrograms += spec_8ch
         all_labels.append("Fall")
@@ -160,7 +204,7 @@ def create_fall_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : 
     for start_sec, end_sec in segments:
 
         spec_8ch = get_8_channel_spectrogram(
-            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)])
+            df[(df["time_sec"] >= start_time) & (df["time_sec"] <= end_time)], band_max_hz=100)
 
         all_spectrograms += spec_8ch
 
@@ -175,7 +219,7 @@ def create_fall_spectrograms(df : pd.DataFrame, fault_category : str, SECONDS : 
 
     return all_spectrograms, all_labels
 
-def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 64, dynamic_range_db = 50, band_max_hz = 100):
+def get_8_channel_spectrogram(data, sampling_frequency = 200, nperseg = 64, dynamic_range_db = 50, band_max_hz = None):
 
     all_spectrograms = []
 
@@ -280,6 +324,46 @@ def get_non_fall_data(dir: Path):
             df = pd.DataFrame(pd.read_csv(str(dir/file)))
             #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
             f_spec, f_labels = create_non_fall_spectrogams(df, SECONDS=10)
+
+            #f_spec = f_spec[:len(t_spec)]
+            #f_labels = f_labels[:len(t_labels)]
+
+            data += f_spec
+            fault_labels += f_labels
+    
+    return data, fault_labels
+
+def get_full_fs_range_data(dir: Path):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        if (("Session" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            f_spec, f_labels = create_full_spectrogam(df, SECONDS=10)
+
+            #f_spec = f_spec[:len(t_spec)]
+            #f_labels = f_labels[:len(t_labels)]
+
+            data += f_spec
+            fault_labels += f_labels
+    
+    return data, fault_labels
+
+def get_session_data(dir: Path, fall_type: str):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        if (("Session" in file)):
+            df = pd.DataFrame(pd.read_csv(str(dir/file)))
+            #t_spec, t_labels = create_true_spectrograms(df, SECONDS=4, nperseg=256)
+            f_spec, f_labels = create_session_spectrogams(df, fall_type, SECONDS=10)
 
             #f_spec = f_spec[:len(t_spec)]
             #f_labels = f_labels[:len(t_labels)]
@@ -435,3 +519,45 @@ def load_test_data():
     test_spectograms += non_slip_trip
 
     return test_spectograms
+
+def load_full_fs_range_data():
+    test_spectograms = []
+    path = Path('.data/test/validationSet')
+
+    controlled = Path(path/'Controlled')
+    hard = Path(path/'Hard')
+    slipTrip = Path(path/'Slip_Trip')
+
+    non_controlled_fall, labels = get_full_fs_range_data(controlled)
+    non_hard_fall, labels = get_full_fs_range_data(hard)
+    non_slip_trip, labels = get_full_fs_range_data(slipTrip)
+
+    test_spectograms += non_controlled_fall
+    test_spectograms += non_hard_fall
+    test_spectograms += non_slip_trip
+
+    return test_spectograms
+
+def load_full_sessions_data():
+    test_spectograms = []
+    labels = []
+    path = Path('.data/test/validationSet')
+
+    controlled = Path(path/'Controlled')
+    hard = Path(path/'Hard')
+    slipTrip = Path(path/'Slip_Trip')
+
+    non_controlled_fall, controlled_labels = get_session_data(controlled, "Controlled Fall")
+    non_hard_fall, hard_labels = get_session_data(hard, "Hard Fall")
+    non_slip_trip, slip_labels = get_session_data(slipTrip, "SlipTrip")
+
+    test_spectograms += non_controlled_fall
+    labels += controlled_labels
+
+    test_spectograms += non_hard_fall
+    labels += hard_labels
+
+    test_spectograms += non_slip_trip
+    labels += slip_labels
+
+    return test_spectograms, labels
