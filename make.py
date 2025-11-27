@@ -278,6 +278,66 @@ def get_primary_data(dir: Path):
     
     return data, fault_labels
 
+def get_test_data(dir: Path):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+    for file in directory:
+        df = pd.DataFrame(pd.read_csv(str(dir/file)))
+        t_spec, t_labels = create_true_spectrograms(df, SECONDS=10)
+        f_spec, f_labels = create_false_spectrogams(df, SECONDS=10)
+        
+        #Makes sure the length for none_falls is equal to the actuall falls.
+        f_spec = f_spec[:len(t_spec)]
+        f_labels = f_labels[:len(t_labels)]
+
+        data += t_spec
+        data += f_spec
+
+        fault_labels += t_labels
+        fault_labels += f_labels
+    
+    return data, fault_labels
+
+def get_secondary_test_data(dir: Path, fault_category: str):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        df = pd.DataFrame(pd.read_csv(str(dir/file)))
+        spec, labels = create_fall_spectrograms(df, fault_category, SECONDS=10, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+        data += spec
+        fault_labels += labels
+    
+    return data, fault_labels
+
+def get_pipleline_test_data(dir: Path, fall_category: str):
+    directory = os.listdir(str(dir))
+    
+    data = []
+    fault_labels = []
+
+    for file in directory:
+        df = pd.DataFrame(pd.read_csv(str(dir/file)))
+        t_spec, t_labels = create_fall_spectrograms(df, fall_category, SECONDS=10, train_seconds=[(df["time_sec"].min(), df["time_sec"].max())])
+        f_spec, f_labels = create_false_spectrogams(df, SECONDS=10)
+        
+        #Makes sure the length for none_falls is equal to the actuall falls.
+        f_spec = f_spec[:len(t_spec)]
+        f_labels = f_labels[:len(t_labels)]
+
+        data += t_spec
+        data += f_spec
+
+        fault_labels += t_labels
+        fault_labels += f_labels
+    
+    return data, fault_labels
+
+
 def get_secondary_data(dir: Path, fault_category: str):
     directory = os.listdir(str(dir))
     
@@ -502,23 +562,79 @@ def load_heathy_data ():
     return test_spectograms
 
 def load_test_data():
-
     test_spectograms = []
-    path = Path('.data/test/validationSet')
+    test_labels = []
+
+    path = Path('./.data/test/validationSet')
 
     controlled = Path(path/'Controlled')
     hard = Path(path/'Hard')
     slipTrip = Path(path/'Slip_Trip')
 
-    non_controlled_fall, labels = get_non_fall_data(controlled)
-    non_hard_fall, labels = get_non_fall_data(hard)
-    non_slip_trip, labels = get_non_fall_data(slipTrip)
+    controlled_falls, controlled_labels = get_test_data(controlled)
+    hard_falls, hard_labels = get_test_data(hard)
+    slip_trip_fall, slipTrip_labels = get_test_data(slipTrip)
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
 
-    test_spectograms += non_controlled_fall
-    test_spectograms += non_hard_fall
-    test_spectograms += non_slip_trip
+    test_spectograms += hard_falls
+    test_labels += hard_labels
 
-    return test_spectograms
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
+
+def load_heath_assessment_test_data():
+    test_spectograms = []
+    test_labels = []
+
+    path = Path('./.data/test/validationSet')
+
+    controlled = Path(path/'Controlled')
+    hard = Path(path/'Hard')
+    slipTrip = Path(path/'Slip_Trip')
+
+    controlled_falls, controlled_labels = get_secondary_test_data(controlled, 'Controlled Fall')
+    hard_falls, hard_labels = get_secondary_test_data(hard, 'Hard Fall')
+    slip_trip_fall, slipTrip_labels = get_secondary_test_data(slipTrip, 'SlipTrip')
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
+
+    test_spectograms += hard_falls
+    test_labels += hard_labels
+
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
+
+def load_test_data_for_pipeline():
+    test_spectograms = []
+    test_labels = []
+
+    path = Path('./.data/test/validationSet')
+
+    controlled = Path(path/'Controlled')
+    hard = Path(path/'Hard')
+    slipTrip = Path(path/'Slip_Trip')
+
+    controlled_falls, controlled_labels = get_pipleline_test_data(controlled, 'Controlled Fall')
+    hard_falls, hard_labels = get_pipleline_test_data(hard, "Hard Fall")
+    slip_trip_fall, slipTrip_labels = get_pipleline_test_data(slipTrip, "SlipTrip")
+    
+    test_spectograms += controlled_falls
+    test_labels += controlled_labels
+
+    test_spectograms += hard_falls
+    test_labels += hard_labels
+
+    test_spectograms += slip_trip_fall
+    test_labels += slipTrip_labels
+
+    return test_spectograms, test_labels
 
 def load_full_fs_range_data():
     test_spectograms = []

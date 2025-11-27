@@ -1,6 +1,6 @@
 from fastai.vision.all import *
 
-from make import load_data_for_pipeline
+from make import load_test_data_for_pipeline
 
 class Report():
     def __init__(self, dataframe: pd.DataFrame, autoencoder: Learner, sd_model: Learner, ha_model: Learner, hybrid: Learner, classic: Learner):
@@ -73,9 +73,9 @@ class Report():
         return TensorImage(t_resized.squeeze(0))  # (3, H, W)
 
 def run():
-    df = pd.DataFrame(columns=['Autoencoder', 'State Detector', 'Health Assessment', 'Hybrid', 'Classic', 'True'])
+    df = pd.DataFrame(columns=['Autoencoder', 'State Detector (Resnet18)', 'Health Assessment (ResNet34)', 'Hybrid', 'Classic', 'True'])
 
-    spec, labels = load_data_for_pipeline()
+    spec, labels = load_test_data_for_pipeline()
 
     autoencoder = load_learner("./models/autoencoder.pkl")
     sd = load_learner("./models/sd-model.pkl")
