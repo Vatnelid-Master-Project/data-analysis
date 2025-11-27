@@ -1,0 +1,409 @@
+,Autoencoder,State Detector (Resnet18),Health Assessment (ResNet34),Hybrid,Classic,True
+0,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+1,Fall,Fall,Controlled Fall,Hard Fall,Hard Fall,Controlled Fall
+2,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+3,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+4,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+5,Fall,Not Fall,Controlled Fall,Hard Fall,SlipTrip,Not Fall
+6,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+7,Fall,Not Fall,SlipTrip,Hard Fall,SlipTrip,Not Fall
+8,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+9,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+10,Fall,Fall,Hard Fall,Controlled Fall,SlipTrip,Controlled Fall
+11,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+12,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+13,Fall,Not Fall,SlipTrip,Hard Fall,SlipTrip,Not Fall
+14,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+15,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+16,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+17,Fall,Fall,Controlled Fall,Hard Fall,SlipTrip,Controlled Fall
+18,Not Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+19,Not Fall,Fall,Controlled Fall,Hard Fall,Controlled Fall,Controlled Fall
+20,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+21,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+22,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+23,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+24,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+25,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+26,Fall,Fall,Hard Fall,Controlled Fall,Controlled Fall,Controlled Fall
+27,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+28,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+29,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+30,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+31,Fall,Not Fall,Controlled Fall,Hard Fall,SlipTrip,Not Fall
+32,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+33,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+34,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+35,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+36,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+37,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+38,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+39,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+40,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+41,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+42,Fall,Fall,Hard Fall,Controlled Fall,Hard Fall,Controlled Fall
+43,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+44,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+45,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+46,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+47,Fall,Not Fall,SlipTrip,Hard Fall,Controlled Fall,Not Fall
+48,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+49,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+50,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+51,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+52,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+53,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+54,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+55,Fall,Not Fall,Controlled Fall,Hard Fall,SlipTrip,Not Fall
+56,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+57,Fall,Fall,Controlled Fall,Hard Fall,Hard Fall,Controlled Fall
+58,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+59,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+60,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+61,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+62,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+63,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+64,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+65,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+66,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+67,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+68,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+69,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+70,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+71,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+72,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Controlled Fall
+73,Fall,Fall,Controlled Fall,Hard Fall,Hard Fall,Controlled Fall
+74,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+75,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Controlled Fall
+76,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+77,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+78,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+79,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+80,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Controlled Fall
+81,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Controlled Fall
+82,Not Fall,Fall,Controlled Fall,Hard Fall,Controlled Fall,Controlled Fall
+83,Not Fall,Fall,Controlled Fall,Hard Fall,SlipTrip,Controlled Fall
+84,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+85,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+86,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+87,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+88,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+89,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+90,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+91,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+92,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+93,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+94,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+95,Fall,Not Fall,SlipTrip,Hard Fall,SlipTrip,Not Fall
+96,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+97,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+98,Fall,Fall,Hard Fall,Controlled Fall,Hard Fall,Hard Fall
+99,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+100,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+101,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+102,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+103,Fall,Not Fall,SlipTrip,Hard Fall,SlipTrip,Not Fall
+104,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+105,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+106,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+107,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,Hard Fall
+108,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+109,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+110,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+111,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+112,Not Fall,Fall,SlipTrip,Hard Fall,SlipTrip,Hard Fall
+113,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,Hard Fall
+114,Fall,Fall,SlipTrip,Hard Fall,Controlled Fall,Hard Fall
+115,Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+116,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+117,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+118,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+119,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+120,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+121,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+122,Fall,Fall,Hard Fall,Controlled Fall,Controlled Fall,Hard Fall
+123,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+124,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+125,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+126,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+127,Fall,Not Fall,SlipTrip,Hard Fall,Controlled Fall,Not Fall
+128,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+129,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+130,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+131,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+132,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+133,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+134,Fall,Not Fall,Controlled Fall,Controlled Fall,SlipTrip,Not Fall
+135,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+136,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+137,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+138,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+139,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+140,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+141,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+142,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+143,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+144,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+145,Fall,Not Fall,Controlled Fall,Hard Fall,Hard Fall,Hard Fall
+146,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Hard Fall
+147,Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+148,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+149,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+150,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+151,Fall,Not Fall,SlipTrip,Hard Fall,Hard Fall,Not Fall
+152,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+153,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+154,Fall,Fall,Hard Fall,SlipTrip,Hard Fall,Hard Fall
+155,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+156,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+157,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+158,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+159,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+160,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+161,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+162,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+163,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+164,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+165,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+166,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+167,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+168,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+169,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+170,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+171,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+172,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+173,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+174,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+175,Fall,Not Fall,SlipTrip,Hard Fall,Hard Fall,Not Fall
+176,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+177,Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+178,Fall,Fall,Hard Fall,Hard Fall,Controlled Fall,Hard Fall
+179,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+180,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+181,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+182,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+183,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+184,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+185,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+186,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+187,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+188,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+189,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+190,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+191,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+192,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+193,Fall,Fall,Controlled Fall,Hard Fall,Hard Fall,Hard Fall
+194,Fall,Fall,SlipTrip,Hard Fall,Controlled Fall,Hard Fall
+195,Fall,Fall,Hard Fall,Hard Fall,Controlled Fall,Hard Fall
+196,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+197,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+198,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+199,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+200,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+201,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+202,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+203,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+204,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+205,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+206,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+207,Fall,Not Fall,SlipTrip,Hard Fall,Hard Fall,Not Fall
+208,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+209,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+210,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+211,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+212,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+213,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+214,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+215,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+216,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+217,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+218,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+219,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+220,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+221,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+222,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+223,Fall,Not Fall,SlipTrip,Controlled Fall,SlipTrip,Not Fall
+224,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+225,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+226,Fall,Fall,Hard Fall,Controlled Fall,Controlled Fall,Hard Fall
+227,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+228,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+229,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+230,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+231,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+232,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+233,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+234,Fall,Fall,Hard Fall,Controlled Fall,Hard Fall,Hard Fall
+235,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,Hard Fall
+236,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+237,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+238,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+239,Fall,Not Fall,SlipTrip,SlipTrip,Controlled Fall,Not Fall
+240,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+241,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+242,Fall,Fall,Hard Fall,Controlled Fall,Hard Fall,Hard Fall
+243,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,Hard Fall
+244,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+245,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+246,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+247,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+248,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+249,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+250,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+251,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+252,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+253,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+254,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+255,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+256,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+257,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+258,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+259,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+260,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+261,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+262,Fall,Not Fall,SlipTrip,Controlled Fall,Hard Fall,Not Fall
+263,Fall,Not Fall,Controlled Fall,Hard Fall,Hard Fall,Not Fall
+264,Not Fall,Fall,Hard Fall,SlipTrip,Hard Fall,SlipTrip
+265,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+266,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+267,Fall,Fall,SlipTrip,SlipTrip,Hard Fall,SlipTrip
+268,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+269,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+270,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+271,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+272,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+273,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+274,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+275,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+276,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+277,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+278,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+279,Fall,Not Fall,SlipTrip,Hard Fall,SlipTrip,Not Fall
+280,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+281,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+282,Fall,Fall,Hard Fall,SlipTrip,SlipTrip,SlipTrip
+283,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+284,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+285,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+286,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+287,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+288,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+289,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+290,Fall,Fall,SlipTrip,SlipTrip,Hard Fall,SlipTrip
+291,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+292,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+293,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+294,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+295,Fall,Not Fall,Controlled Fall,Hard Fall,Hard Fall,Not Fall
+296,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+297,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+298,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+299,Not Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+300,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+301,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+302,Fall,Not Fall,Controlled Fall,SlipTrip,SlipTrip,Not Fall
+303,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+304,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,SlipTrip
+305,Not Fall,Fall,Controlled Fall,SlipTrip,SlipTrip,SlipTrip
+306,Fall,Not Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+307,Fall,Not Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+308,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+309,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+310,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+311,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+312,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+313,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+314,Fall,Fall,Hard Fall,SlipTrip,Hard Fall,SlipTrip
+315,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+316,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+317,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+318,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+319,Fall,Not Fall,Controlled Fall,Hard Fall,Hard Fall,Not Fall
+320,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+321,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+322,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+323,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+324,Not Fall,Fall,Controlled Fall,Hard Fall,SlipTrip,Not Fall
+325,Fall,Not Fall,Controlled Fall,Controlled Fall,SlipTrip,Not Fall
+326,Fall,Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+327,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+328,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+329,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+330,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+331,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+332,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+333,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+334,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+335,Fall,Not Fall,Controlled Fall,Hard Fall,SlipTrip,Not Fall
+336,Not Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+337,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+338,Fall,Fall,Controlled Fall,Hard Fall,Controlled Fall,SlipTrip
+339,Fall,Fall,Hard Fall,Hard Fall,Hard Fall,SlipTrip
+340,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+341,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+342,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+343,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+344,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+345,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+346,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+347,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+348,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+349,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+350,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+351,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+352,Not Fall,Fall,Hard Fall,Hard Fall,SlipTrip,SlipTrip
+353,Fall,Fall,Hard Fall,Hard Fall,SlipTrip,SlipTrip
+354,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+355,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+356,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+357,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+358,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+359,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+360,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+361,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+362,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+363,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+364,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+365,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+366,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+367,Fall,Not Fall,SlipTrip,SlipTrip,SlipTrip,Not Fall
+368,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+369,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+370,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+371,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+372,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+373,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+374,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+375,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+376,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+377,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+378,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+379,Fall,Fall,SlipTrip,SlipTrip,Hard Fall,SlipTrip
+380,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+381,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+382,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+383,Fall,Not Fall,Controlled Fall,Hard Fall,Controlled Fall,Not Fall
+384,Not Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+385,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+386,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+387,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+388,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+389,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+390,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+391,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+392,Fall,Fall,Hard Fall,Hard Fall,SlipTrip,SlipTrip
+393,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+394,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+395,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+396,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+397,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+398,Fall,Not Fall,Controlled Fall,Controlled Fall,Controlled Fall,Not Fall
+399,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+400,Fall,Fall,SlipTrip,Hard Fall,Hard Fall,SlipTrip
+401,Fall,Fall,SlipTrip,Hard Fall,SlipTrip,SlipTrip
+402,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+403,Fall,Fall,SlipTrip,SlipTrip,SlipTrip,SlipTrip
+404,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+405,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+406,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
+407,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall,Not Fall
