@@ -212,3 +212,7 @@ is_fall
 models
 Maguns
 Halldor
+
+# generated test files
+*.png
+*.pt
