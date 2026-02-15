@@ -1,6 +1,7 @@
 from fastai.vision.all import *
 
 from make import load_test_data_for_pipeline
+from collections import Counter
 
 FLOOR_DB = -45.0
 TARGET_HW = (112, 112)
@@ -32,26 +33,44 @@ class Report():
 
     def run_classic(self, img: TensorImage):
         return self.classic.predict(img)[0]
+    
+    def run_vote(self, ha_vote, hybrid_vote, classic_vote):
+        result_list = []
+
+        result_list.append(ha_vote)
+        result_list.append(hybrid_vote)
+        result_list.append(classic_vote)
+
+        vote_winner = Counter(result_list)
+
+        if (vote_winner.most_common(1)[0][1] == 1):
+            return ha_vote
+
+        return vote_winner.most_common(1)[0][0]
+
+
+
 
     def run_report(self, specs: list, true_labels: list):
         df = self.dataframe
         
         # Run autoencoder
         for i in range(len(specs)):
-            auto_result = self.run_autonencoder(self.__get_tensor(specs[i]), 0.011947502)
+            auto_result = self.run_autonencoder(self.__get_tensor(specs[i]), 0.013841685838997364)
             sd_result = self.run_state_detection(self.__get_tensor(specs[i]))
             
             if auto_result == "Fall" and sd_result == "Fall":
                 ha_result = self.run_heath_assessment(self.__get_tensor(specs[i]))
                 hybrid_result = self.run_hybrid(self.__get_tensor(specs[i]))
-                classic_result = self.run_classic(self.__get_tensor(specs[i]))    
+                classic_result = self.run_classic(self.__get_tensor(specs[i]))
+                vote_winner = self.run_vote(ha_result, hybrid_result, classic_result)
             else:
                 ha_result = "Not Fall"
                 hybrid_result = "Not Fall"
                 classic_result = "Not Fall"
-                
+                vote_winner = "Not Fall"
 
-            df.loc[len(df)] = [auto_result, sd_result, ha_result, hybrid_result, classic_result, true_labels[i]]
+            df.loc[len(df)] = [auto_result, sd_result, ha_result, hybrid_result, classic_result, vote_winner, true_labels[i]]
     
     def __get_tensor(self, arr):
         # If spectrogram is multi-channel, convert to grayscale first
@@ -95,7 +114,7 @@ class Report():
         return TensorImage(t_resized.squeeze(0))  # (3, H, W)
 
 def run():
-    df = pd.DataFrame(columns=['Autoencoder', 'State Detector (Resnet18)', 'Health Assessment (ResNet34)', 'Hybrid', 'Classic', 'True'])
+    df = pd.DataFrame(columns=['Autoencoder', 'State Detector (Resnet18)', 'Health Assessment (ResNet34)', 'Hybrid', 'Classic', 'Vote', 'True'])
 
     spec, labels = load_test_data_for_pipeline()
 
